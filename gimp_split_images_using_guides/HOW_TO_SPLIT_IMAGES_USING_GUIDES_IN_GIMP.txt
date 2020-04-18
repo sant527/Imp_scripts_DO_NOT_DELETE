@@ -1,0 +1,85 @@
+First set the quides where all we want to the image to be sliced
+
+Both horizontal and vertical guides
+
+Then go to 
+
+Filters > Web > Slice
+
+Image format: png
+
+Separate image folder: Yes
+
+Then Ok
+
+#########################################################################
+
+OPTION1: DELETE PROGRAMITICALLY; For this ensure the guides follow the odd are not required
+
+Then we can see a image folder with Files
+
+slice_0_0.png
+slice_0_1.png
+slice_1_0.png
+slice_1_1.png
+slice_2_0.png
+slice_2_1.png
+
+
+DELETE odd filenames horizontally:
+
+for file in *; do
+	echo $file
+	echo $file | awk -F '_|\\.' '{print $3" "$4}'
+	# Eg slice_0_1.png
+	# output: 1 png
+	num=`echo $file | awk -F '_|\\\.' '{print $3}'`
+	# Eg slice_0_1.png
+	# output: 1
+	echo $num
+	if (( $num % 2 )); then
+        echo $num is odd
+        rm $file
+    else
+        echo $num is even
+    fi
+done
+
+Delete odd filenames vertically
+
+for file in *; do
+	echo $file
+	echo $file | awk -F '_|\\.' '{print $2" "$3" "$4}'
+	# Eg slice_0_1.png
+	# output: 0 1 png
+	num=`echo $file | awk -F '_|\\\.' '{print $2}'`
+	# Eg slice_0_1.png
+	# output: 0
+	echo $num
+	if (( $num % 2 )); then
+        echo $num is odd
+        rm $file
+    else
+        echo $num is even
+    fi
+done
+
+
+###########################################################################
+
+OPTION2: MANUALLY DELETE THE NOT REQUIRED FILES
+
+
+#######################################################################
+
+COMBINE THE IMAGES horizontally
+
+convert +append  $(ls -v *_0_*)  out_0.png
+convert +append  $(ls -v *_2_*)  out_2.png
+convert -append out* final.png
+
+
+COMBINE THE IMAGES VERTICALLY (if manullay delete files)
+
+$ convert -append $(ls -1 *.png) out.png
+

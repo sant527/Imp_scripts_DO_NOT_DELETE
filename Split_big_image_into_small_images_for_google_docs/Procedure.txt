@@ -1,0 +1,37 @@
+While making Google docs if large sized images are used then when we convert to pdf or html_zip the image resolution becomes very small
+
+So we have to split the images vertically so that they are less than 100k
+
+
+SO run the following script: It will split the images and stores them in a folder.
+Now copy paste all of them in the google docs.
+
+filename="screencapture-file-tmp-tmp7-4bu0-html-2020-04-03-21_43_48.png"               
+rm -rf ~/croped &&
+mkdir ~/croped &&
+width=`identify -format '%w' ${filename}`
+echo "width= $width"
+height=`identify -format '%h' ${filename}`
+echo "height= $height"
+
+a=`echo "scale=10; ((900/$width) * $height)/600" | bc`
+echo $a
+
+rem=`echo "scale=0; $a % 1" | bc`
+echo $rem
+int1=`echo "(900* $height)/($width*600)" | bc`
+echo $int1
+int2=$(( $int1 + 1))
+echo $int2
+
+st=$((`echo "$rem < 0.3"| bc`))
+echo "st= $st"
+if [ $st -eq 1 ]; then
+        echo "$rem < 0.3"
+    convert -crop 1x${int1}+0+8@ ${filename} ~/croped/crop_grid_%d.png
+else
+        echo "$rem > 0.3"
+        convert -crop 1x${int2}+0+8@ ${filename} ~/croped/crop_grid_%d.png
+fi
+
+pcmanfm /home/simha/croped

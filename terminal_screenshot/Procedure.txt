@@ -1,0 +1,17 @@
+The procedure is mentioned in:
+
+https://github.com/sant527/django_basic_documentation_ver2/blob/master/README.md#how-to-take-screen-shot-of-terminator
+
+STEP1: resize the terminator till the prompt (see doc)
+
+STEP2: Great a desktop keyboard shortcut (WIN + h ) for the scrip sh /home/simha/.public_html/xterm_terminator_screenshot.sh 
+
+STEP3: press WIN + h. It will take a screen shot of the terminator and then scroll up
+
+STEP4 : continue pressing WIN+H till you want the screenshots
+
+All the screenshots will be stored in the folder /home/simha/terminator_screenshots
+
+To combine all the images into one use the following command:
+
+convert -append $(ls -1 *.png | sort -r) out.png
